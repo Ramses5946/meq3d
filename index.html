@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Meq3D: figuras 3D impresas a pedido, con fabricación transparente y licencias claras."
+    />
+    <meta name="theme-color" content="#090807" />
+    <title>Meq3D · Figuras forjadas capa a capa</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Michroma&family=Oxanium:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="#inicio" aria-label="Meq3D, inicio">
+        <span class="brand-mark" aria-hidden="true">M3</span>
+        <span class="brand-copy">
+          <strong>MEQ<span>3D</span></strong>
+          <small>DIGITAL FOUNDRY</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+        <span class="sr-only">Abrir navegación</span>
+      </button>
+
+      <nav id="nav" class="main-nav" aria-label="Navegación principal">
+        <a href="#catalogo">Colección</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#personalizados">Personalizados</a>
+        <a href="#licencias">Licencias</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <button class="quote-trigger" type="button" data-open-quote>
+        Cotización <span data-quote-count>0</span>
+      </button>
+    </header>
+
+    <main id="main">
+      <section id="inicio" class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" role="img" aria-label="Colección conceptual de figuras 3D en un taller de fabricación"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-content shell">
+          <p class="eyebrow"><span>MEQ3D / BUILD 0.1</span> · IMPRESIÓN A PEDIDO</p>
+          <h1 id="hero-title">DE LA MATERIA<br />A <em>TU FIGURA.</em></h1>
+          <p class="hero-lead">
+            Piezas impresas capa a capa, con terminación cuidada, fabricación transparente y
+            licencias visibles.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#catalogo">Explorar colección <span>↘</span></a>
+            <a class="button button-ghost" href="#personalizados">Cotizar una idea</a>
+          </div>
+          <ul class="hero-specs" aria-label="Características del servicio">
+            <li><strong>01</strong><span>Fabricación<br />a pedido</span></li>
+            <li><strong>02</strong><span>Escala y color<br />personalizables</span></li>
+            <li><strong>03</strong><span>Licencia<br />trazable</span></li>
+          </ul>
+        </div>
+        <div class="scroll-cue" aria-hidden="true"><span></span>EXPLORAR</div>
+      </section>
+
+      <section class="manifesto shell" aria-label="Propuesta de valor">
+        <p class="section-index">01 / PROPUESTA</p>
+        <div>
+          <h2>NO VENDEMOS ARCHIVOS.<br /><span>FORJAMOS OBJETOS.</span></h2>
+          <p>
+            Tú eliges la pieza, la escala y el acabado. Meq3D transforma el diseño autorizado en
+            un objeto físico listo para exhibir o regalar.
+          </p>
+        </div>
+      </section>
+
+      <section id="catalogo" class="catalog-section">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <p class="section-index">02 / COLECCIÓN INICIAL</p>
+              <h2>FIGURAS EN LA FORJA.</h2>
+            </div>
+            <div class="filter-bar" role="group" aria-label="Filtrar colección">
+              <button class="active" type="button" data-filter="all">Todas</button>
+              <button type="button" data-filter="pla">PLA</button>
+              <button type="button" data-filter="resina">Resina</button>
+            </div>
+          </div>
+
+          <div class="demo-notice">
+            <span>VISTAS CONCEPTUALES</span>
+            Esta colección demuestra la dirección visual. Las fotografías, medidas, precios y
+            licencias definitivas deben reemplazarse antes de habilitar pagos.
+          </div>
+
+          <div class="product-grid" data-product-grid></div>
+        </div>
+      </section>
+
+      <section id="proceso" class="process-section shell">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-index">03 / PROCESO</p>
+            <h2>ASÍ SE FORJA.</h2>
+          </div>
+          <p>Un flujo simple, visible y pensado para producir solo lo necesario.</p>
+        </div>
+        <ol class="process-grid">
+          <li>
+            <span class="process-number">01</span>
+            <div class="process-icon" aria-hidden="true">◇</div>
+            <h3>ELIGE</h3>
+            <p>Selecciona una pieza de la colección o trae un modelo con licencia verificable.</p>
+          </li>
+          <li>
+            <span class="process-number">02</span>
+            <div class="process-icon" aria-hidden="true">⌁</div>
+            <h3>CONFIGURA</h3>
+            <p>Define escala, material, color, base y nivel de terminación.</p>
+          </li>
+          <li>
+            <span class="process-number">03</span>
+            <div class="process-icon" aria-hidden="true">▧</div>
+            <h3>IMPRIMIMOS</h3>
+            <p>Revisamos el archivo, preparamos soportes y fabricamos capa a capa.</p>
+          </li>
+          <li>
+            <span class="process-number">04</span>
+            <div class="process-icon" aria-hidden="true">↗</div>
+            <h3>RECIBE</h3>
+            <p>Coordinamos retiro o despacho con plazo y costo confirmados previamente.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="personalizados" class="custom-section">
+        <div class="custom-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="wire-object">M3</div>
+        </div>
+        <div class="custom-copy">
+          <p class="section-index">04 / PIEZAS PERSONALIZADAS</p>
+          <h2>¿TIENES UNA IDEA?<br /><span>LA LLEVAMOS A VOLUMEN.</span></h2>
+          <p>
+            Agrega referencias, tamaño objetivo y uso esperado. Prepararemos una cotización con
+            material, plazo y revisión de licencia antes de fabricar.
+          </p>
+          <form class="custom-form" data-custom-form>
+            <label>
+              Nombre del proyecto
+              <input name="project" autocomplete="off" placeholder="Ej. regalo corporativo" required />
+            </label>
+            <label>
+              Tamaño aproximado
+              <select name="size" required>
+                <option value="">Seleccionar</option>
+                <option>Hasta 10 cm</option>
+                <option>10–20 cm</option>
+                <option>Más de 20 cm</option>
+              </select>
+            </label>
+            <label class="span-two">
+              Cuéntanos qué quieres fabricar
+              <textarea name="details" rows="4" placeholder="Describe la pieza, color y fecha ideal" required></textarea>
+            </label>
+            <button class="button button-primary span-two" type="submit">Agregar solicitud a cotización</button>
+          </form>
+          <p class="form-note" data-form-note aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="licencias" class="license-section shell">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-index">05 / LICENCIAS</p>
+            <h2>ORIGEN CLARO.<br />USO RESPONSABLE.</h2>
+          </div>
+          <p>
+            “Descarga gratuita” no significa “uso comercial”. Cada pieza vendible debe tener una
+            licencia compatible o una autorización expresa.
+          </p>
+        </div>
+
+        <div class="license-layout">
+          <div class="license-matrix" role="table" aria-label="Compatibilidad de licencias">
+            <div class="license-row header" role="row">
+              <span role="columnheader">Licencia</span><span role="columnheader">Venta física</span>
+            </div>
+            <div class="license-row" role="row"><span>Diseño propio</span><strong class="yes">Sí</strong></div>
+            <div class="license-row" role="row"><span>CC0 / Dominio público</span><strong class="yes">Sí</strong></div>
+            <div class="license-row" role="row"><span>CC BY / CC BY-SA</span><strong class="review">Con condiciones</strong></div>
+            <div class="license-row" role="row"><span>Licencia comercial</span><strong class="review">Con respaldo</strong></div>
+            <div class="license-row" role="row"><span>CC BY-NC / uso personal</span><strong class="no">No</strong></div>
+            <div class="license-row" role="row"><span>Licencia desconocida</span><strong class="no">No</strong></div>
+          </div>
+
+          <article class="license-card">
+            <p class="mono-label">MODELO DE ATRIBUCIÓN / SKU</p>
+            <h3>REGISTRO POR PRODUCTO</h3>
+            <dl>
+              <div><dt>DISEÑO</dt><dd>Nombre del modelo</dd></div>
+              <div><dt>AUTOR</dt><dd>Autor o estudio</dd></div>
+              <div><dt>FUENTE</dt><dd>Enlace original</dd></div>
+              <div><dt>LICENCIA</dt><dd>Tipo y versión</dd></div>
+              <div><dt>CAMBIOS</dt><dd>Escala, base, adaptación</dd></div>
+              <div><dt>VERIFICACIÓN</dt><dd>Fecha y respaldo</dd></div>
+            </dl>
+            <button class="text-button" type="button" data-open-legal>Leer declaración completa ↗</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="faq" class="faq-section shell">
+        <div>
+          <p class="section-index">06 / PREGUNTAS</p>
+          <h2>ANTES DE<br />ENCENDER<br /><span>LA MÁQUINA.</span></h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>¿Las figuras vienen pintadas?<span>+</span></summary>
+            <p>Dependerá del producto y del nivel de terminación elegido. Cada cotización debe indicar claramente si la pieza se entrega cruda, lijada, imprimada o pintada.</p>
+          </details>
+          <details>
+            <summary>¿Puedo pedir otro tamaño?<span>+</span></summary>
+            <p>Sí. La escala afecta tiempo, material, resistencia y precio. La viabilidad se confirma antes de fabricar.</p>
+          </details>
+          <details>
+            <summary>¿Puedo enviar cualquier archivo STL?<span>+</span></summary>
+            <p>No. Debe ser técnicamente imprimible y contar con licencia para el uso solicitado. Los modelos “solo uso personal” no se comercializan.</p>
+          </details>
+          <details>
+            <summary>¿Las piezas personalizadas tienen retracto?<span>+</span></summary>
+            <p>En Chile, los bienes confeccionados según especificaciones del consumidor pueden quedar excluidos del retracto si se informa de forma previa, visible y junto al precio. Esto no limita la garantía legal.</p>
+          </details>
+          <details>
+            <summary>¿Las imágenes muestran el producto final?<span>+</span></summary>
+            <p>En este MVP son vistas conceptuales. Antes de publicar la tienda deben reemplazarse por fotografías reales e identificarse color, escala y acabado.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="final-cta">
+        <div class="final-cta-grid" aria-hidden="true"></div>
+        <div class="shell">
+          <p class="eyebrow">MEQ3D · DIGITAL FOUNDRY</p>
+          <h2>LA MATERIA ESTÁ LISTA.<br /><span>DECIDE QUÉ FORJAR.</span></h2>
+          <button class="button button-primary" type="button" data-open-quote>Preparar cotización</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <span class="brand-mark">M3</span>
+          <div><strong>MEQ3D</strong><small>Una iniciativa de MeqTec Foundry</small></div>
+        </div>
+        <div>
+          <p class="mono-label">DATOS DEL VENDEDOR</p>
+          <p data-seller-status>Información legal pendiente de configuración.</p>
+        </div>
+        <div>
+          <p class="mono-label">DOCUMENTOS</p>
+          <button type="button" data-open-legal>Licencias y propiedad intelectual</button>
+          <button type="button" data-open-seller>Información del vendedor</button>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <span>MEQ3D / BUILD 0.1</span>
+        <span>© <span data-year></span> · FABRICADO CAPA A CAPA</span>
+      </div>
+    </footer>
+
+    <dialog class="product-dialog" data-product-dialog>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar">×</button>
+      <div data-product-dialog-content></div>
+    </dialog>
+
+    <dialog class="legal-dialog" data-legal-dialog>
+      <button class="dialog-close" type="button" data-close-legal aria-label="Cerrar">×</button>
+      <p class="mono-label">DECLARACIÓN DE LICENCIAS</p>
+      <h2>USO DE DISEÑOS 3D</h2>
+      <p>Meq3D comercializa objetos físicos fabricados mediante impresión 3D. Los diseños utilizados pueden ser creaciones propias, obras dedicadas al dominio público, modelos publicados bajo licencias que permiten uso comercial o diseños respecto de los cuales se ha obtenido autorización expresa.</p>
+      <p>Cuando el diseño pertenece a un tercero, Meq3D identifica el nombre del modelo, su autor, la fuente original, la licencia, su versión y las modificaciones realizadas. La venta corresponde exclusivamente al objeto físico impreso y sus terminaciones; no incluye la entrega del archivo digital ni la cesión de derechos sobre el diseño.</p>
+      <p>La disponibilidad pública o descarga gratuita de un archivo no se considera por sí sola autorización para su explotación comercial. Meq3D no comercializa modelos marcados como “solo uso personal”, “no comercial” o sin una licencia verificable.</p>
+      <p>Las marcas, personajes y demás elementos protegidos pertenecen a sus respectivos titulares. Una licencia sobre el archivo 3D no implica necesariamente autorización sobre marcas u otros derechos incorporados al diseño.</p>
+      <p class="legal-warning">Este texto es una base operativa y debe validarse jurídicamente antes de publicar ventas.</p>
+    </dialog>
+
+    <dialog class="seller-dialog" data-seller-dialog>
+      <button class="dialog-close" type="button" data-close-seller aria-label="Cerrar">×</button>
+      <p class="mono-label">CONFIGURACIÓN OBLIGATORIA</p>
+      <h2>DATOS DEL VENDEDOR</h2>
+      <p>Antes de habilitar ventas, completa el objeto <code>STORE_CONFIG</code> en <code>app.js</code> con datos verificables.</p>
+      <ul class="seller-checklist">
+        <li>Nombre o razón social</li><li>RUT/RUN</li><li>Domicilio legal</li>
+        <li>Correo y teléfono</li><li>Representante legal, si corresponde</li>
+        <li>Zonas, costo y plazo de despacho</li><li>Políticas de retracto y garantía</li>
+      </ul>
+    </dialog>
+
+    <aside class="quote-drawer" data-quote-drawer aria-hidden="true" aria-label="Cotización">
+      <div class="drawer-head">
+        <div><p class="mono-label">SOLICITUD LOCAL</p><h2>TU COTIZACIÓN</h2></div>
+        <button type="button" data-close-quote aria-label="Cerrar cotización">×</button>
+      </div>
+      <div class="drawer-items" data-quote-items></div>
+      <div class="drawer-empty" data-quote-empty>
+        <span>◇</span><p>Aún no agregas piezas o solicitudes.</p>
+      </div>
+      <div class="drawer-actions">
+        <p>La solicitud se prepara localmente. No se enviará ningún dato hasta configurar un canal real de venta.</p>
+        <button class="button button-primary" type="button" data-copy-quote>Copiar resumen</button>
+        <button class="text-button danger" type="button" data-clear-quote>Vaciar lista</button>
+        <p class="copy-status" data-copy-status aria-live="polite"></p>
+      </div>
+    </aside>
+    <div class="drawer-backdrop" data-drawer-backdrop></div>
+  </body>
+</html>
