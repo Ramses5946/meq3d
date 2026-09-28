@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Meq3D · Administrar catálogo</title>
+    <link rel="icon" href="assets/meqforge.webp" type="image/webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Michroma&family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20260928-3" />
+    <script src="admin.js?v=20260928-3" defer></script>
+  </head>
+  <body class="admin-page">
+    <main class="admin-shell">
+      <header class="admin-header">
+        <img class="brand-logo footer-logo" src="assets/meqforge.webp" alt="Logo de MeqForge" />
+        <div><p class="mono-label">MEQFORGE / MEQ3D</p><h1>ADMINISTRAR CATÁLOGO</h1><p>Agrega productos, imágenes y modelos internos.</p></div>
+      </header>
+      <div class="admin-notice" data-admin-notice><strong>Panel local.</strong> Solo funciona desde esta máquina en <code>http://127.0.0.1:3201/admin.html</code>. La administración está bloqueada desde el dominio público.</div>
+      <div class="admin-layout">
+        <section class="admin-card">
+          <h2>NUEVO PRODUCTO</h2>
+          <form class="admin-form" data-admin-form>
+            <label>SKU<input name="id" maxlength="32" placeholder="M3D-DRAGON-01" pattern="[A-Za-z0-9-]{3,32}" required /></label>
+            <label>Nombre<input name="name" maxlength="100" required /></label>
+            <label>Material<input name="material" maxlength="50" placeholder="PLA" required /></label>
+            <label>Acabado<input name="finish" maxlength="50" placeholder="Mate" required /></label>
+            <label>Escala<input name="scale" maxlength="50" placeholder="15 cm" required /></label>
+            <label>Precio<input name="price" maxlength="50" placeholder="$24.990 o Cotizar" required /></label>
+            <label>Categoría<select name="category" required><option value="pla">PLA</option><option value="resina">Resina</option><option value="other">Otra</option></select></label>
+            <label>Licencia<input name="license" maxlength="100" placeholder="Diseño propio" required /></label>
+            <label class="span-two">Descripción<textarea name="description" rows="4" minlength="10" maxlength="600" required></textarea></label>
+            <label>Imagen pública<input name="image" type="file" accept="image/webp,image/png,image/jpeg" required /></label>
+            <label>STL interno (opcional)<input name="model" type="file" accept=".stl,model/stl,application/sla" /></label>
+            <button class="button button-primary span-two" type="submit" data-admin-submit>Agregar al catálogo</button>
+          </form>
+          <p class="admin-status" data-admin-status aria-live="polite"></p>
+        </section>
+        <aside class="admin-card">
+          <h2>PRODUCTOS AGREGADOS</h2>
+          <div class="admin-products" data-admin-products><p>Cargando catálogo…</p></div>
+        </aside>
+      </div>
+    </main>
+  </body>
+</html>

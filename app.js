@@ -8,7 +8,7 @@ const STORE_CONFIG = {
   shipping: "",
 };
 
-const products = [
+const defaultProducts = [
   {
     id: "M3D-OWL-01",
     name: "Búho Vector",
@@ -43,6 +43,8 @@ const products = [
     description: "Silueta low-poly original con facetas marcadas y acabado cálido.",
   },
 ];
+let products = [...defaultProducts];
+let currentFilter = "all";
 
 const qs = (selector, parent = document) => parent.querySelector(selector);
 const qsa = (selector, parent = document) => [...parent.querySelectorAll(selector)];
@@ -67,6 +69,7 @@ function saveQuote() {
 }
 
 function renderProducts(filter = "all") {
+  currentFilter = filter;
   const grid = qs("[data-product-grid]");
   const visible = products.filter((product) => filter === "all" || product.category === filter);
   grid.innerHTML = visible.map((product) => `
@@ -76,13 +79,13 @@ function renderProducts(filter = "all") {
         <span class="concept-badge">IMAGEN CONCEPTUAL</span>
       </div>
       <div class="product-body">
-        <div class="product-code"><span>${product.id}</span><span>${product.license}</span></div>
-        <h3>${product.name}</h3>
-        <p>${product.description}</p>
+        <div class="product-code"><span>${escapeHtml(product.id)}</span><span>${escapeHtml(product.license)}</span></div>
+        <h3>${escapeHtml(product.name)}</h3>
+        <p>${escapeHtml(product.description)}</p>
         <div class="product-meta">
-          <div><small>MATERIAL</small><strong>${product.material}</strong></div>
-          <div><small>ACABADO</small><strong>${product.finish}</strong></div>
-          <div><small>PRECIO</small><strong>Cotizar</strong></div>
+          <div><small>MATERIAL</small><strong>${escapeHtml(product.material)}</strong></div>
+          <div><small>ACABADO</small><strong>${escapeHtml(product.finish)}</strong></div>
+          <div><small>PRECIO</small><strong>${escapeHtml(product.price || "Cotizar")}</strong></div>
         </div>
         <div class="product-actions">
           <button type="button" data-view-product="${product.id}">Ver ficha</button>
@@ -135,17 +138,17 @@ function openProduct(id) {
   if (!product) return;
   qs("[data-product-dialog-content]").innerHTML = `
     <div class="dialog-product">
-      <img src="${product.image}" alt="Vista conceptual de ${product.name}" />
+      <img src="${escapeHtml(product.image)}" alt="Vista conceptual de ${escapeHtml(product.name)}" />
       <div class="dialog-product-copy">
-        <p class="mono-label">${product.id} / VISTA CONCEPTUAL</p>
-        <h2>${product.name}</h2>
-        <p>${product.description}</p>
+        <p class="mono-label">${escapeHtml(product.id)} / VISTA CONCEPTUAL</p>
+        <h2>${escapeHtml(product.name)}</h2>
+        <p>${escapeHtml(product.description)}</p>
         <dl>
-          <div><dt>MATERIAL</dt><dd>${product.material}</dd></div>
-          <div><dt>ACABADO</dt><dd>${product.finish}</dd></div>
-          <div><dt>ESCALA</dt><dd>${product.scale}</dd></div>
-          <div><dt>LICENCIA</dt><dd>${product.license}</dd></div>
-          <div><dt>PRECIO</dt><dd>Debe cotizarse</dd></div>
+          <div><dt>MATERIAL</dt><dd>${escapeHtml(product.material)}</dd></div>
+          <div><dt>ACABADO</dt><dd>${escapeHtml(product.finish)}</dd></div>
+          <div><dt>ESCALA</dt><dd>${escapeHtml(product.scale)}</dd></div>
+          <div><dt>LICENCIA</dt><dd>${escapeHtml(product.license)}</dd></div>
+          <div><dt>PRECIO</dt><dd>${escapeHtml(product.price || "Debe cotizarse")}</dd></div>
         </dl>
         <p class="legal-warning">Esta imagen no acredita la existencia de un modelo 3D imprimible. La ficha debe reemplazarse con evidencia real antes de vender.</p>
         <button class="button button-primary" type="button" data-dialog-add="${product.id}">Agregar a cotización</button>
@@ -290,3 +293,12 @@ qs("[data-year]").textContent = new Date().getFullYear();
 renderProducts();
 renderQuote();
 renderSeller();
+
+fetch("/api/catalog", { headers: { Accept: "application/json" } })
+  .then((response) => response.ok ? response.json() : Promise.reject(new Error("Catálogo no disponible")))
+  .then((data) => {
+    const customProducts = Array.isArray(data.products) ? data.products : [];
+    products = [...defaultProducts, ...customProducts];
+    renderProducts(currentFilter);
+  })
+  .catch(() => {});

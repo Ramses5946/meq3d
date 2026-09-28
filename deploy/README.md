@@ -17,3 +17,7 @@ En esta máquina, el servidor y el túnel se registran como tareas de inicio de 
 ## Archivos STL
 
 El endpoint `POST /api/uploads` acepta STL ASCII o binario de hasta 25 MB. Los archivos y sus metadatos se guardan fuera de la raíz pública en `..\work\meq3d-uploads`, salvo que se configure `MEQ3D_UPLOAD_DIR`. No hay una ruta pública para descargarlos.
+
+## Administración del catálogo
+
+Abre `http://127.0.0.1:3201/admin.html` desde esta máquina. El panel permite agregar un producto con imagen pública y un STL interno opcional. La operación de escritura se rechaza cuando llega a través de Cloudflare; los datos se guardan en `..\work\meq3d-catalog` y el sitio público consume `GET /api/catalog`.
