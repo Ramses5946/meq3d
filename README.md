@@ -6,6 +6,10 @@ MVP estático y responsive inspirado en la identidad visual de MeqForge.
 
 Abre `index.html` directamente o sirve la carpeta con cualquier servidor estático.
 
+## Despliegue en esta máquina
+
+La configuración operativa para publicar el sitio por Cloudflare Tunnel está documentada en [`deploy/README.md`](deploy/README.md).
+
 ## Antes de publicar
 
 1. Completar `STORE_CONFIG` al inicio de `app.js` con los datos verificables del vendedor.

@@ -16,8 +16,8 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Michroma&family=Oxanium:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260928-2" />
+    <script src="app.js?v=20260928-2" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -173,10 +173,33 @@
               </select>
             </label>
             <label class="span-two">
-              Cuéntanos qué quieres fabricar
-              <textarea name="details" rows="4" placeholder="Describe la pieza, color y fecha ideal" required></textarea>
+              Correo o teléfono de contacto
+              <input name="contact" autocomplete="email" maxlength="160" placeholder="Para responder tu cotización" required />
             </label>
-            <button class="button button-primary span-two" type="submit">Agregar solicitud a cotización</button>
+            <label class="span-two">
+              Cuéntanos qué quieres fabricar
+              <textarea name="details" rows="4" maxlength="1500" placeholder="Describe la pieza, color y fecha ideal" required></textarea>
+            </label>
+            <label>
+              Licencia del diseño
+              <select name="license" required>
+                <option value="">Seleccionar</option>
+                <option value="own">Diseño propio</option>
+                <option value="authorized">Tengo autorización del autor</option>
+                <option value="commercial">Tengo licencia comercial</option>
+                <option value="open-commercial">Licencia abierta con uso comercial</option>
+              </select>
+            </label>
+            <label class="file-field">
+              Archivo para revisar
+              <input name="stl" type="file" accept=".stl,model/stl,application/sla" required />
+              <span data-file-name>STL · máximo 25 MB</span>
+            </label>
+            <label class="terms-check span-two">
+              <input name="accepted" type="checkbox" required />
+              <span>Declaro que tengo derecho a usar este diseño y acepto los <button type="button" data-open-terms>términos y condiciones</button> y el tratamiento indicado en la <button type="button" data-open-privacy>política de archivos y privacidad</button>.</span>
+            </label>
+            <button class="button button-primary span-two" type="submit" data-upload-submit>Subir STL y agregar solicitud</button>
           </form>
           <p class="form-note" data-form-note aria-live="polite"></p>
         </div>
@@ -275,6 +298,8 @@
         <div>
           <p class="mono-label">DOCUMENTOS</p>
           <button type="button" data-open-legal>Licencias y propiedad intelectual</button>
+          <button type="button" data-open-terms>Términos y condiciones</button>
+          <button type="button" data-open-privacy>Privacidad y archivos STL</button>
           <button type="button" data-open-seller>Información del vendedor</button>
         </div>
       </div>
@@ -312,6 +337,46 @@
       </ul>
     </dialog>
 
+    <dialog class="terms-dialog" data-terms-dialog>
+      <button class="dialog-close" type="button" data-close-terms aria-label="Cerrar">×</button>
+      <p class="mono-label">CONDICIONES DEL SERVICIO · CHILE</p>
+      <h2>TÉRMINOS Y CONDICIONES</h2>
+      <p class="legal-warning">Versión operativa de septiembre de 2026. Los datos legales del vendedor deben completarse antes de aceptar pagos o confirmar ventas.</p>
+      <h3>1. Alcance y cotizaciones</h3>
+      <p>Meq3D recibe solicitudes para evaluar e imprimir objetos físicos en 3D. Enviar una solicitud o un archivo no constituye una venta ni obliga a fabricar. El contrato se perfecciona únicamente cuando Meq3D confirma por escrito las especificaciones, precio total, forma de pago, plazo y modalidad de entrega, y el cliente acepta esas condiciones.</p>
+      <h3>2. Archivos y derechos</h3>
+      <p>Quien envía un archivo declara que es su autor o que cuenta con una licencia o autorización suficiente para el uso solicitado. No se aceptan diseños con licencia exclusivamente personal o no comercial cuando el encargo implique explotación comercial, ni contenidos ilícitos o que infrinjan derechos de terceros. Meq3D puede rechazar o pedir antecedentes sobre el origen del modelo.</p>
+      <h3>3. Revisión técnica y modificaciones</h3>
+      <p>Todo modelo queda sujeto a revisión de geometría, escala, espesores, soportes y viabilidad. Cualquier reparación, división, cambio de escala o adaptación relevante será informada antes de fabricar. La apariencia final puede presentar variaciones propias del material y del proceso de impresión 3D, dentro de las tolerancias aceptadas en la cotización.</p>
+      <h3>4. Precio, pago y producción</h3>
+      <p>Los precios se expresarán en pesos chilenos e indicarán impuestos y costos adicionales aplicables. La producción comienza solo después de la aceptación de la cotización y del pago o anticipo acordado. Los plazos se cuentan desde esa confirmación y pueden ajustarse por complejidad, disponibilidad de material o fuerza mayor, lo que será comunicado oportunamente.</p>
+      <h3>5. Entrega y despacho</h3>
+      <p>La cotización informará retiro o despacho, cobertura, costo y plazo estimado. El cliente debe proporcionar datos correctos y revisar el embalaje al recibir. Retrasos o daños atribuibles al transportista serán gestionados sin limitar los derechos irrenunciables del consumidor.</p>
+      <h3>6. Retracto y piezas personalizadas</h3>
+      <p>En compras a distancia existe, por regla general, derecho a retracto dentro de 10 días. Los bienes confeccionados conforme a especificaciones del consumidor pueden quedar excluidos cuando esta condición se informa de manera previa, destacada y junto al precio. La exclusión aplicable será reiterada en la cotización antes del pago y no limita la garantía legal ni los derechos por incumplimiento de las especificaciones convenidas.</p>
+      <h3>7. Garantía legal</h3>
+      <p>Los productos nuevos cuentan con la garantía legal vigente en Chile. Si la pieza presenta una falla, no corresponde a lo convenido o no es apta para su uso normal, el consumidor podrá ejercer las alternativas que reconozca la Ley N.º 19.496 dentro del plazo legal. No cubre daños por golpes, calor, exposición, modificaciones o uso contrario a las indicaciones entregadas.</p>
+      <h3>8. Cancelaciones</h3>
+      <p>Antes de iniciar la fabricación, las partes podrán acordar la cancelación y la devolución de montos no ejecutados. Una vez iniciada una pieza personalizada, los costos efectivamente incurridos y la exclusión de retracto informada en la cotización podrán afectar la devolución, sin perjuicio de los derechos irrenunciables del consumidor.</p>
+      <h3>9. Responsabilidad y legislación</h3>
+      <p>Las piezas se fabrican para el uso informado y no deben destinarse a aplicaciones médicas, alimentarias, eléctricas, estructurales o de seguridad sin validación específica. Estos términos se rigen por las leyes de la República de Chile. Ninguna cláusula pretende renunciar o limitar derechos irrenunciables del consumidor.</p>
+    </dialog>
+
+    <dialog class="privacy-dialog" data-privacy-dialog>
+      <button class="dialog-close" type="button" data-close-privacy aria-label="Cerrar">×</button>
+      <p class="mono-label">PRIVACIDAD · ARCHIVOS DE CLIENTES</p>
+      <h2>POLÍTICA DE ARCHIVOS STL</h2>
+      <p>Se recopilan el nombre del proyecto, un medio de contacto, la descripción, la licencia declarada y el archivo STL únicamente para revisar viabilidad y preparar la cotización solicitada.</p>
+      <ul>
+        <li>Los archivos se almacenan de forma privada y no se publican como recursos del sitio.</li>
+        <li>No se venden ni se usan para fabricar para terceros sin autorización.</li>
+        <li>Los archivos sin pedido confirmado podrán eliminarse después de 90 días.</li>
+        <li>El cliente puede solicitar eliminación o corrección mediante el canal de contacto del vendedor, una vez configurado.</li>
+        <li>No deben subirse archivos con información sensible ni diseños sobre los que no se tengan derechos suficientes.</li>
+      </ul>
+      <p class="legal-warning">La identidad y el canal de contacto del responsable deben completarse antes de operar comercialmente.</p>
+    </dialog>
+
     <aside class="quote-drawer" data-quote-drawer aria-hidden="true" aria-label="Cotización">
       <div class="drawer-head">
         <div><p class="mono-label">SOLICITUD LOCAL</p><h2>TU COTIZACIÓN</h2></div>
@@ -322,7 +387,7 @@
         <span>◇</span><p>Aún no agregas piezas o solicitudes.</p>
       </div>
       <div class="drawer-actions">
-        <p>La solicitud se prepara localmente. No se enviará ningún dato hasta configurar un canal real de venta.</p>
+        <p>Los archivos STL se envían para revisión privada. Este resumen permanece en tu navegador y puedes copiarlo como respaldo.</p>
         <button class="button button-primary" type="button" data-copy-quote>Copiar resumen</button>
         <button class="text-button danger" type="button" data-clear-quote>Vaciar lista</button>
         <p class="copy-status" data-copy-status aria-live="polite"></p>

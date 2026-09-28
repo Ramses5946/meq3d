@@ -48,6 +48,19 @@ const qs = (selector, parent = document) => parent.querySelector(selector);
 const qsa = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 let quote = JSON.parse(localStorage.getItem("meq3d-quote") || "[]");
 
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, (character) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
+  })[character]);
+}
+
+function metadataHeader(value) {
+  const bytes = new TextEncoder().encode(JSON.stringify(value));
+  let binary = "";
+  bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+  return btoa(binary);
+}
+
 function saveQuote() {
   localStorage.setItem("meq3d-quote", JSON.stringify(quote));
   renderQuote();
@@ -94,9 +107,9 @@ function renderQuote() {
   qsa("[data-quote-count]").forEach((node) => { node.textContent = quote.length; });
   items.innerHTML = quote.map((item) => `
     <div class="drawer-item">
-      ${item.image ? `<img src="${item.image}" alt="" />` : `<span aria-hidden="true">◇</span>`}
-      <div><strong>${item.name}</strong><small>${item.detail}</small></div>
-      <button type="button" data-remove-item="${item.id}" aria-label="Quitar ${item.name}">×</button>
+      ${item.image ? `<img src="${escapeHtml(item.image)}" alt="" />` : `<span aria-hidden="true">◇</span>`}
+      <div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.detail)}</small></div>
+      <button type="button" data-remove-item="${escapeHtml(item.id)}" aria-label="Quitar ${escapeHtml(item.name)}">×</button>
     </div>
   `).join("");
   empty.hidden = quote.length > 0;
@@ -173,6 +186,10 @@ document.addEventListener("click", (event) => {
   if (event.target.closest("[data-close-legal]")) qs("[data-legal-dialog]").close();
   if (event.target.closest("[data-open-seller]")) qs("[data-seller-dialog]").showModal();
   if (event.target.closest("[data-close-seller]")) qs("[data-seller-dialog]").close();
+  if (event.target.closest("[data-open-terms]")) qs("[data-terms-dialog]").showModal();
+  if (event.target.closest("[data-close-terms]")) qs("[data-terms-dialog]").close();
+  if (event.target.closest("[data-open-privacy]")) qs("[data-privacy-dialog]").showModal();
+  if (event.target.closest("[data-close-privacy]")) qs("[data-privacy-dialog]").close();
   const toggle = event.target.closest(".menu-toggle");
   if (toggle) {
     const open = toggle.getAttribute("aria-expanded") === "true";
@@ -182,19 +199,76 @@ document.addEventListener("click", (event) => {
   if (event.target.closest(".main-nav a")) { qs(".main-nav").classList.remove("open"); qs(".menu-toggle").setAttribute("aria-expanded", "false"); }
 });
 
-qs("[data-custom-form]").addEventListener("submit", (event) => {
+qs("[data-custom-form] input[type='file']").addEventListener("change", (event) => {
+  const file = event.currentTarget.files[0];
+  qs("[data-file-name]").textContent = file ? `${file.name} · ${(file.size / 1024 / 1024).toFixed(2)} MB` : "STL · máximo 25 MB";
+});
+
+qs("[data-custom-form]").addEventListener("submit", async (event) => {
   event.preventDefault();
+  const form = event.currentTarget;
   const data = new FormData(event.currentTarget);
+  const file = data.get("stl");
+  const note = qs("[data-form-note]");
+  const submit = qs("[data-upload-submit]");
+
+  if (!(file instanceof File) || !file.name.toLowerCase().endsWith(".stl")) {
+    note.dataset.state = "error";
+    note.textContent = "Selecciona un archivo con extensión .stl.";
+    return;
+  }
+  if (file.size > 25 * 1024 * 1024) {
+    note.dataset.state = "error";
+    note.textContent = "El archivo supera el máximo de 25 MB.";
+    return;
+  }
+
+  submit.disabled = true;
+  submit.textContent = "Subiendo STL…";
+  note.dataset.state = "";
+  note.textContent = "Enviando el modelo de forma segura…";
+
+  let upload;
+  try {
+    const response = await fetch("/api/uploads", {
+      method: "POST",
+      headers: {
+        "Content-Type": "model/stl",
+        "X-Meq3D-Metadata": metadataHeader({
+          project: data.get("project"),
+          contact: data.get("contact"),
+          details: data.get("details"),
+          license: data.get("license"),
+          originalName: file.name,
+          accepted: data.get("accepted") === "on",
+        }),
+      },
+      body: file,
+    });
+    upload = await response.json();
+    if (!response.ok) throw new Error(upload.error || "No fue posible subir el archivo.");
+  } catch (error) {
+    note.dataset.state = "error";
+    note.textContent = error.message || "No fue posible subir el archivo.";
+    submit.disabled = false;
+    submit.textContent = "Subir STL y agregar solicitud";
+    return;
+  }
+
   const item = {
-    id: `CUSTOM-${Date.now()}`,
+    id: upload.id,
     name: data.get("project"),
-    detail: `${data.get("size")} · ${data.get("details")}`,
+    detail: `${data.get("size")} · STL recibido: ${upload.fileName} · Ref. ${upload.id}`,
     image: "",
   };
   quote.push(item);
   saveQuote();
-  event.currentTarget.reset();
-  qs("[data-form-note]").textContent = "Solicitud agregada. Revisa el resumen de cotización.";
+  form.reset();
+  qs("[data-file-name]").textContent = "STL · máximo 25 MB";
+  submit.disabled = false;
+  submit.textContent = "Subir STL y agregar solicitud";
+  note.dataset.state = "success";
+  note.textContent = `Archivo recibido. Referencia ${upload.id}.`;
   openQuote();
 });
 
