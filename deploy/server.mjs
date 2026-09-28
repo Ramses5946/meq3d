@@ -155,6 +155,7 @@ async function handleAdminProduct(req, res) {
       id, name, description, material, finish, scale, price, license, category,
       image: `/catalog-assets/${id}/image.${extension}`,
       hasModel,
+      modelUrl: hasModel ? `/catalog-models/${id}.stl` : "",
       createdAt: new Date().toISOString(),
     };
     catalog.push(product);
@@ -176,6 +177,25 @@ function serveCatalogAsset(pathname, res) {
   const stats = statSync(filePath);
   res.writeHead(200, {
     "Content-Type": contentTypes[extname(filePath)] || "application/octet-stream",
+    "Content-Length": stats.size,
+    "Cache-Control": "public, max-age=3600",
+    "X-Content-Type-Options": "nosniff",
+  });
+  createReadStream(filePath).pipe(res);
+  return true;
+}
+
+function serveCatalogModel(pathname, res) {
+  const match = /^\/catalog-models\/([A-Z0-9-]{3,32})\.stl$/.exec(pathname);
+  if (!match) return false;
+  const filePath = join(catalogModelsRoot, `${match[1]}.stl`);
+  if (!existsSync(filePath) || !statSync(filePath).isFile()) {
+    send(res, 404, "Not found");
+    return true;
+  }
+  const stats = statSync(filePath);
+  res.writeHead(200, {
+    "Content-Type": "model/stl",
     "Content-Length": stats.size,
     "Cache-Control": "public, max-age=3600",
     "X-Content-Type-Options": "nosniff",
@@ -314,6 +334,7 @@ createServer((req, res) => {
   }
 
   if (serveCatalogAsset(pathname, res)) return;
+  if (serveCatalogModel(pathname, res)) return;
 
   if (pathname === "/healthz") {
     send(res, 200, "ok", { "Cache-Control": "no-store" });

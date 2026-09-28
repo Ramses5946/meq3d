@@ -75,8 +75,8 @@ function renderProducts(filter = "all") {
   grid.innerHTML = visible.map((product) => `
     <article class="product-card">
       <div class="product-image">
-        <img src="${product.image}" alt="Vista conceptual de ${product.name}" loading="lazy" />
-        <span class="concept-badge">IMAGEN CONCEPTUAL</span>
+        <img src="${escapeHtml(product.image)}" alt="Vista de ${escapeHtml(product.name)}" loading="lazy" />
+        <span class="concept-badge">${product.modelUrl ? "MODELO 3D DISPONIBLE" : "IMAGEN CONCEPTUAL"}</span>
       </div>
       <div class="product-body">
         <div class="product-code"><span>${escapeHtml(product.id)}</span><span>${escapeHtml(product.license)}</span></div>
@@ -138,9 +138,11 @@ function openProduct(id) {
   if (!product) return;
   qs("[data-product-dialog-content]").innerHTML = `
     <div class="dialog-product">
-      <img src="${escapeHtml(product.image)}" alt="Vista conceptual de ${escapeHtml(product.name)}" />
+      ${product.modelUrl
+        ? `<div class="dialog-model"><meq-model-viewer src="${escapeHtml(product.modelUrl)}" auto-rotate screenshot></meq-model-viewer><small>ARRASTRA PARA GIRAR · RUEDA PARA ZOOM</small></div>`
+        : `<img src="${escapeHtml(product.image)}" alt="Vista conceptual de ${escapeHtml(product.name)}" />`}
       <div class="dialog-product-copy">
-        <p class="mono-label">${escapeHtml(product.id)} / VISTA CONCEPTUAL</p>
+        <p class="mono-label">${escapeHtml(product.id)} / ${product.modelUrl ? "MODELO 3D" : "VISTA CONCEPTUAL"}</p>
         <h2>${escapeHtml(product.name)}</h2>
         <p>${escapeHtml(product.description)}</p>
         <dl>
@@ -150,11 +152,15 @@ function openProduct(id) {
           <div><dt>LICENCIA</dt><dd>${escapeHtml(product.license)}</dd></div>
           <div><dt>PRECIO</dt><dd>${escapeHtml(product.price || "Debe cotizarse")}</dd></div>
         </dl>
-        <p class="legal-warning">Esta imagen no acredita la existencia de un modelo 3D imprimible. La ficha debe reemplazarse con evidencia real antes de vender.</p>
+        <p class="legal-warning">${product.modelUrl
+          ? "Vista interactiva generada desde el STL registrado para este producto. La apariencia final puede variar según material, escala y acabado."
+          : "Esta imagen no acredita la existencia de un modelo 3D imprimible. La ficha debe reemplazarse con evidencia real antes de vender."}</p>
         <button class="button button-primary" type="button" data-dialog-add="${product.id}">Agregar a cotización</button>
       </div>
     </div>`;
-  qs("[data-product-dialog]").showModal();
+  const dialog = qs("[data-product-dialog]");
+  dialog.showModal();
+  requestAnimationFrame(() => qs("meq-model-viewer", dialog)?.resize());
 }
 
 function sellerConfigured() {
@@ -202,9 +208,15 @@ document.addEventListener("click", (event) => {
   if (event.target.closest(".main-nav a")) { qs(".main-nav").classList.remove("open"); qs(".menu-toggle").setAttribute("aria-expanded", "false"); }
 });
 
+let customerPreviewUrl = "";
 qs("[data-custom-form] input[type='file']").addEventListener("change", (event) => {
   const file = event.currentTarget.files[0];
   qs("[data-file-name]").textContent = file ? `${file.name} · ${(file.size / 1024 / 1024).toFixed(2)} MB` : "STL · máximo 25 MB";
+  const preview = qs("[data-upload-model-preview]");
+  if (customerPreviewUrl) URL.revokeObjectURL(customerPreviewUrl);
+  customerPreviewUrl = file ? URL.createObjectURL(file) : "";
+  preview.hidden = !file;
+  if (file) qs("meq-model-viewer", preview).setAttribute("src", customerPreviewUrl);
 });
 
 qs("[data-custom-form]").addEventListener("submit", async (event) => {
@@ -267,6 +279,9 @@ qs("[data-custom-form]").addEventListener("submit", async (event) => {
   quote.push(item);
   saveQuote();
   form.reset();
+  if (customerPreviewUrl) URL.revokeObjectURL(customerPreviewUrl);
+  customerPreviewUrl = "";
+  qs("[data-upload-model-preview]").hidden = true;
   qs("[data-file-name]").textContent = "STL · máximo 25 MB";
   submit.disabled = false;
   submit.textContent = "Subir STL y agregar solicitud";

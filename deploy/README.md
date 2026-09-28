@@ -21,3 +21,5 @@ El endpoint `POST /api/uploads` acepta STL ASCII o binario de hasta 25 MB. Los a
 ## Administración del catálogo
 
 Abre `http://127.0.0.1:3201/admin.html` desde esta máquina. El panel permite agregar un producto con imagen pública y un STL interno opcional. La operación de escritura se rechaza cuando llega a través de Cloudflare; los datos se guardan en `..\work\meq3d-catalog` y el sitio público consume `GET /api/catalog`.
+
+Los STL asociados a productos del catálogo se visualizan con el componente `meq-model-viewer`, una adaptación para STL del comportamiento de React Bits ModelViewer. El modelo se puede rotar, ampliar y capturar como PNG. Los STL enviados por clientes continúan siendo privados: la previsualización previa al envío utiliza una URL temporal creada por el navegador.

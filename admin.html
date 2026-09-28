@@ -10,7 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Michroma&family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=20260928-3" />
-    <script src="admin.js?v=20260928-3" defer></script>
+    <script type="module" src="model-viewer.js?v=20260928-4"></script>
+    <script src="admin.js?v=20260928-4" defer></script>
   </head>
   <body class="admin-page">
     <main class="admin-shell">
@@ -34,6 +35,10 @@
             <label class="span-two">Descripción<textarea name="description" rows="4" minlength="10" maxlength="600" required></textarea></label>
             <label>Imagen pública<input name="image" type="file" accept="image/webp,image/png,image/jpeg" required /></label>
             <label>STL interno (opcional)<input name="model" type="file" accept=".stl,model/stl,application/sla" /></label>
+            <div class="model-preview span-two" data-admin-model-preview hidden>
+              <div class="model-preview-head"><span>VISTA PREVIA 3D</span><small>Así se mostrará en el catálogo</small></div>
+              <meq-model-viewer auto-rotate screenshot></meq-model-viewer>
+            </div>
             <button class="button button-primary span-two" type="submit" data-admin-submit>Agregar al catálogo</button>
           </form>
           <p class="admin-status" data-admin-status aria-live="polite"></p>

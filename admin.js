@@ -3,6 +3,9 @@ const adminStatus = document.querySelector("[data-admin-status]");
 const adminSubmit = document.querySelector("[data-admin-submit]");
 const adminProducts = document.querySelector("[data-admin-products]");
 const localHostnames = new Set(["127.0.0.1", "localhost"]);
+const adminModelInput = adminForm.querySelector('input[name="model"]');
+const adminModelPreview = document.querySelector("[data-admin-model-preview]");
+let adminPreviewUrl = "";
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, (character) => ({
@@ -10,10 +13,13 @@ function escapeHtml(value) {
   })[character]);
 }
 
-function fileAsDataUrl(file) {
+function fileAsDataUrl(file, fallbackType = "") {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () => {
+      const result = String(reader.result);
+      resolve(fallbackType && !file.type ? result.replace(/^data:;/, `data:${fallbackType};`) : result);
+    };
     reader.onerror = () => reject(new Error(`No fue posible leer ${file.name}.`));
     reader.readAsDataURL(file);
   });
@@ -39,6 +45,14 @@ if (!localHostnames.has(location.hostname)) {
   adminStatus.dataset.state = "error";
   adminStatus.textContent = "Abre este panel desde la URL local indicada arriba.";
 }
+
+adminModelInput.addEventListener("change", () => {
+  const file = adminModelInput.files[0];
+  if (adminPreviewUrl) URL.revokeObjectURL(adminPreviewUrl);
+  adminPreviewUrl = file ? URL.createObjectURL(file) : "";
+  adminModelPreview.hidden = !file;
+  if (file) adminModelPreview.querySelector("meq-model-viewer").setAttribute("src", adminPreviewUrl);
+});
 
 adminForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -68,7 +82,7 @@ adminForm.addEventListener("submit", async (event) => {
       material: data.get("material"), finish: data.get("finish"), scale: data.get("scale"),
       price: data.get("price"), license: data.get("license"), category: data.get("category"),
       image: await fileAsDataUrl(image),
-      model: model instanceof File && model.size ? await fileAsDataUrl(model) : "",
+      model: model instanceof File && model.size ? await fileAsDataUrl(model, "model/stl") : "",
     };
     const response = await fetch("/api/admin/products", {
       method: "POST",
@@ -78,6 +92,9 @@ adminForm.addEventListener("submit", async (event) => {
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || "No fue posible guardar el producto.");
     adminForm.reset();
+    if (adminPreviewUrl) URL.revokeObjectURL(adminPreviewUrl);
+    adminPreviewUrl = "";
+    adminModelPreview.hidden = true;
     adminStatus.dataset.state = "success";
     adminStatus.textContent = `${result.product.name} ya aparece en el catálogo público.`;
     await loadProducts();

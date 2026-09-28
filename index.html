@@ -17,7 +17,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css?v=20260928-3" />
-    <script src="app.js?v=20260928-3" defer></script>
+    <script type="module" src="model-viewer.js?v=20260928-4"></script>
+    <script src="app.js?v=20260928-5" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -195,6 +196,10 @@
               <input name="stl" type="file" accept=".stl,model/stl,application/sla" required />
               <span data-file-name>STL · máximo 25 MB</span>
             </label>
+            <div class="model-preview span-two" data-upload-model-preview hidden>
+              <div class="model-preview-head"><span>VISTA PREVIA 3D</span><small>Arrastra para girar · rueda para zoom</small></div>
+              <meq-model-viewer auto-rotate screenshot></meq-model-viewer>
+            </div>
             <label class="terms-check span-two">
               <input name="accepted" type="checkbox" required />
               <span>Declaro que tengo derecho a usar este diseño y acepto los <button type="button" data-open-terms>términos y condiciones</button> y el tratamiento indicado en la <button type="button" data-open-privacy>política de archivos y privacidad</button>.</span>
