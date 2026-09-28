@@ -10,14 +10,14 @@ class MeqModelViewer extends HTMLElement {
     this.dragging = false;
     this.previous = { x: 0, y: 0 };
     this.velocity = { x: 0, y: 0 };
-    this.zoom = 3.2;
+    this.zoom = 3.4;
   }
 
   connectedCallback() {
     this.shadowRoot.innerHTML = `
       <style>
-        :host { position: relative; display: block; width: 100%; height: 100%; min-height: 300px; contain: layout paint; }
-        canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+        :host { position: relative; display: block; width: 100%; min-height: 300px; contain: layout paint; overflow: hidden; }
+        canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
         canvas:active { cursor: grabbing; }
         .status { position: absolute; inset: 0; display: grid; place-items: center; color: #b3a69c; font: 11px "IBM Plex Mono", monospace; pointer-events: none; }
         .hint { position: absolute; left: 12px; bottom: 10px; color: #74665c; font: 8px "IBM Plex Mono", monospace; pointer-events: none; }
@@ -135,7 +135,7 @@ class MeqModelViewer extends HTMLElement {
       const size = geometry.boundingBox.getSize(new THREE.Vector3());
       const center = geometry.boundingBox.getCenter(new THREE.Vector3());
       geometry.translate(-center.x, -center.y, -center.z);
-      const scale = 2.15 / Math.max(size.x, size.y, size.z, 0.001);
+      const scale = 1.55 / Math.max(size.x, size.y, size.z, 0.001);
       this.material = new THREE.MeshStandardMaterial({ color: 0xbeb6ae, metalness: 0.48, roughness: 0.42 });
       this.geometry = geometry;
       this.mesh = new THREE.Mesh(geometry, this.material);
